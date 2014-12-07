@@ -1,4 +1,3 @@
-#!/bin/bash
 #compdef grove
 
 typeset -A opt_args
