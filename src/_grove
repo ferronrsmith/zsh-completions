@@ -6,11 +6,11 @@ typeset -A opt_args
 ############ helper function start #################
 
 _gcloud () {
-    gcloud compute $1 list
+    gcloud compute "${1}" list
 }
 
 _gcloud_list () {
-    gcloud compute $1 list --regexp .\*-.\*-.\*-.\* | awk '{ if (NR > 1) { printf "%s ", $1; } }'
+    gcloud compute "${1}" list --regexp .\*-.\*-.\*-.\* | awk '{ if (NR > 1) { printf "%s ", $1; } }'
 }
 
 _zones () {
@@ -31,12 +31,12 @@ _groves () {
 
 
 _debug () {
-    echo "\n###############"
-    echo "\n1 ... $words"
-    echo "\n2 ... $CURRENT"
-    echo "\n3 ... $words[CURRENT-1]"
-    echo "\n4 ... ${words[CURRENT-1]}"
-    echo "\n###############"
+    echo "n###############"
+    echo "1 ... ${words}"
+    echo "2 ... ${CURRENT}"
+    echo "3 ... $words[CURRENT-1]"
+    echo "4 ... ${words[CURRENT-1]}"
+    echo "###############"
 }
 
 ############ helper function end ###################
@@ -44,6 +44,7 @@ _debug () {
 
 ############ array instances start #################
 
+# shellcheck disable=SC2034
 list_opts=(
     "--grove-id:restricts listing by grove identifier"
     "--type:restricts listing by instance type"
@@ -52,18 +53,19 @@ list_opts=(
     "--sort:sorts listing by field"
 )
 
+# shellcheck disable=SC2034
 # cache zone. _zones seems very slow
 zones_opts=(
     "us-central1-a:US Region Zone A. Sandy Bridge Processor Type"
     "us-central1-b:US Region Zone B. Sandy Bridge Processor Type"
     "us-central1-f:US Region Zone F. Ivy Bridge Processor Type"
-    "europe-west1-a:Europian Region Zone A (deprecated). Sandy Bridge Processor Type"
     "europe-west1-b:Europian Region Zone B. Sandy Bridge Processor Type"
     "asia-east1-a:Asian Region Zone A. Ivy Bridge Processor Type"
     "asia-east1-b:Asian Region Zone B. Ivy Bridge Processor Type"
     "asia-east1-c:Asian Region Zone C. Ivy Bridge Processor Type"
 )
 
+# shellcheck disable=SC2034
 type_opts=(
     'command-center:command center node'
     'data:data node'
@@ -71,12 +73,14 @@ type_opts=(
     'mongo:mongo database node'
 )
 
+# shellcheck disable=SC2034
 network_opts=(
     'add:add a network'
     'delete:delete a network'
     'list:list all networks'
 )
 
+# shellcheck disable=SC2034
 firewall_opts=(
     'add:add a firewall rule'
     'add-file:add a firewall rule using configuration from a file'
@@ -84,6 +88,7 @@ firewall_opts=(
     'list:list all firewall rules'
 )
 
+# shellcheck disable=SC2034
 instance_opts=(
     'add:add a instance to a grove'
     'delete:delete an instance from a grove'
@@ -91,6 +96,7 @@ instance_opts=(
     'ssh:connect to an instance'
     'copy-to:copy files to an instance'
     'copy-from:copy files from an instance to a local machine'
+    'package:generate an image from an instance'
 )
 
 
@@ -103,6 +109,7 @@ _arguments -C \
   '*:: :->args' \
 && ret=0
 
+# shellcheck disable=SC2034
 case "$state" in
     (cmds)
     local commands; commands=(
@@ -184,7 +191,7 @@ case "$state" in
             ;;
             (instance)
                 case "${words[CURRENT-1]}" in
-                    delete|ssh|copy-to|copy-from)
+                    delete|ssh|copy-to|copy-from|package)
                         local instances; instances=($(_instance_names))
                         _describe -t instances 'remove' instances && ret=0
                     ;;
