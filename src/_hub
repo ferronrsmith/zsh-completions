@@ -1,6 +1,5 @@
 #compdef hub
 
-# source : https://raw.githubusercontent.com/github/hub/master/etc/hub.zsh_completion
 # Zsh will source this file when attempting to autoload the "_hub" function,
 # typically on the first attempt to complete the hub command.  We define two new
 # setup helper routines (one for the zsh-distributed version, one for the
@@ -59,6 +58,9 @@ __hub_setup_zsh_fns () {
       - set1 \
         '-m[message]' \
         '-F[file]' \
+        '-a[user]' \
+        '-M[milestone]' \
+        '-l[labels]' \
       - set2 \
         '-i[issue]:issue number:' \
       - set3 \
