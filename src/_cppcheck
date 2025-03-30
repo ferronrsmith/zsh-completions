@@ -49,12 +49,9 @@ _cppcheck_files() {
 }
 
 _cppcheck() {
-  local curcontext="$curcontext" state line
-  typeset -A opt_args
-
   local check_ids='(all warning style performance portability information unusedFunction missingInclude)'
 
-  _arguments -C \
+  _arguments \
     "--addon=[Execute addon]" \
     "--addon-python=[Specify the python interpreter]: :_files" \
     "--cppcheck-build-dir=[Analysis output directory]:directory:_files -/" \
@@ -64,7 +61,7 @@ _cppcheck() {
     "--config-exclude=[Path to be excluded from configuration checking]:directory:_files -/" \
     "--config-exclude-files=[A file that contains a list of config-excludes]:file:_files" \
     "--doc[Print a list of all available checks]" \
-    "*--disable=[Disable indivisual checks]:id:$check_ids" \
+    "*--disable=[Disable individual checks]:id:$check_ids" \
     "--dump[Dump xml data for each translation unit]" \
     "-D[Define preprocessor symbol]" \
     "-U[Undefine preprocessor symbol]" \
